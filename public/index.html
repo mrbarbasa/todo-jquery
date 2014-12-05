@@ -6,7 +6,24 @@
     <link rel="stylesheet" href="/css/styles.css">
   </head>
   <body>
-    <h1>todos</h1>
+    <header class="header_block">
+      <h1 id="todos_title">todos</h1>
+    </header>
+
+    <div class="main_section">
+      <section id="todos_section">
+        <div id="todos_top">
+          <input type="text" placeholder="What needs to be done?" style="width:300px;">
+        </div>
+        <ul id="todos">
+          <!-- Dynamically generated list goes here -->
+        </ul>
+      </section>
+    </div>
+
+    <footer class="footer_block">
+    </footer>
+
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="/js/todo.js"></script>
   </body>
