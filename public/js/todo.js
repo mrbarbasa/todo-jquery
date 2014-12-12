@@ -51,7 +51,7 @@ $(function() {
       todos.push({
         index: index,
         title: $(this).text(),
-        completed: $(this).find("input:checked").val() === "on"
+        completed: $(this).find("input:checked").length > 0
       });
     });
 
