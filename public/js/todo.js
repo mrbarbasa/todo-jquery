@@ -6,6 +6,31 @@ $(function() {
     return itemsTotal - itemsCompleted;
   }
 
+  // Load saved data onto the page
+  $.get("/todo_save.txt", function(data) {
+    var todos = $.parseJSON(data);
+
+    todos.forEach(function(item) {
+      var todoItem = $("<li>", {
+        class: "todo_item",
+        html: $("<input>", {
+          type: "checkbox",
+          checked: item.completed
+        })
+      });
+      todoItem.append(item.title);
+      $("#todos").append(todoItem);
+
+      if (item.completed) {
+        itemsCompleted++;
+      }
+      itemsTotal++;
+    });
+
+    $("#todos_left").html(getItemsLeft());
+    $("#todos_completed").html(itemsCompleted);
+  });
+
   $("#todo_input").keypress(function(e) {
     if (e.which === 13) { // When Enter key is pressed, process the input
       var input = $(this);
