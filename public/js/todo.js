@@ -56,7 +56,7 @@ $(function() {
     });
 
     var jsonTodos = {
-      "list_to_save": JSON.stringify(todos)
+      "savedTodos": JSON.stringify(todos)
     };
 
     $.post("/save", jsonTodos);
