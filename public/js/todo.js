@@ -43,4 +43,22 @@ $(function() {
       }
     }
   });
+
+  $("#saveTodos").click(function() {
+    var todos = [];
+
+    $("#todos .todo_item").each(function(index, element) {
+      todos.push({
+        index: index,
+        title: $(this).text(),
+        completed: $(this).find("input:checked").val() === "on"
+      });
+    });
+
+    var jsonTodos = {
+      "list_to_save": JSON.stringify(todos)
+    };
+
+    $.post("/save", jsonTodos);
+  });
 });

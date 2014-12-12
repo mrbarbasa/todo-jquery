@@ -1,0 +1,23 @@
+{
+  "name": "todo-jquery",
+  "version": "0.0.0",
+  "description": "todo-jquery ===========",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.10.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mrbarbasa/todo-jquery.git"
+  },
+  "author": "Marifel Barbasa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrbarbasa/todo-jquery/issues"
+  },
+  "homepage": "https://github.com/mrbarbasa/todo-jquery"
+}
