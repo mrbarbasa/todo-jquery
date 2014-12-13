@@ -83,4 +83,12 @@ $(function() {
 
     $.post("/save", jsonTodos);
   });
+
+  $("#clearCompletedTodos").click(function() {
+    $("#todos .todo_item").each(function(index, element) {
+      if ($(this).hasClass("todo_item_completed")) {
+        $(this).remove();
+      }
+    });
+  });
 });
