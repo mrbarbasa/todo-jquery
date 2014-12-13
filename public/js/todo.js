@@ -6,20 +6,24 @@ $(function() {
     return itemsTotal - itemsCompleted;
   }
 
+  function addTodoItem(title, completed) {
+    var todoItem = $("<li>", {
+      class: "todo_item" + (completed ? " todo_item_completed" : ""),
+      html: $("<input>", {
+        type: "checkbox",
+        checked: completed
+      })
+    });
+    todoItem.append(title);
+    return todoItem;
+  }
+
   // Load saved data onto the page
   $.get("/todo_save.txt", function(data) {
     var todos = $.parseJSON(data);
 
     todos.forEach(function(item) {
-      var todoItem = $("<li>", {
-        class: "todo_item",
-        html: $("<input>", {
-          type: "checkbox",
-          checked: item.completed
-        })
-      });
-      todoItem.append(item.title);
-      $("#todos").append(todoItem);
+      $("#todos").append(addTodoItem(item.title, item.completed));
 
       if (item.completed) {
         itemsCompleted++;
@@ -37,14 +41,7 @@ $(function() {
       var todoText = input.val(); // Save the value before clearing it
       input.val(""); // Clear out the text after Enter is pressed
 
-      var todoItem = $("<li>", {
-        class: "todo_item",
-        html: $("<input>", {
-          type: "checkbox"
-        })
-      });
-      todoItem.append(todoText);
-      $("#todos").append(todoItem);
+      $("#todos").append(addTodoItem(todoText, false));
       itemsTotal++;
       $("#todos_left").html(getItemsLeft());
     }
