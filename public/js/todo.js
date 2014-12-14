@@ -31,7 +31,17 @@ $(function() {
             console.log("Deleted todo item");
 
             var button = $(e.currentTarget);
-            button.closest("li").remove(); // Remove the todo item from the DOM
+            var parentLi = button.closest("li");
+
+            if (parentLi.hasClass("todo_item_completed")) {
+              itemsCompleted--;
+            }
+            itemsTotal--;
+
+            $("#todos_left").html(getItemsLeft());
+            $("#todos_completed").html(itemsCompleted);
+
+            parentLi.remove(); // Remove the todo item from the DOM
           }
         });
       } // end click
@@ -46,7 +56,7 @@ $(function() {
     todos.forEach(function(item) {
       $("#todos").append(addTodoItem(item.title, item.completed, item._id));
 
-      if (item.completed) {
+      if (item.completed.toString() === "true") {
         itemsCompleted++;
       }
       itemsTotal++;
@@ -126,8 +136,22 @@ $(function() {
   $("#clearCompletedTodos").click(function() {
     $("#todos .todo_item").each(function(index, element) {
       if ($(this).hasClass("todo_item_completed")) {
-        $(this).remove();
-      }
+        var listItem = $(this);
+        
+        $.ajax({
+          url: "/item/" + listItem.data("object-id"),
+          type: "DELETE",
+          success: function(result) {
+            itemsCompleted--;
+            itemsTotal--;            
+
+            $("#todos_left").html(getItemsLeft());
+            $("#todos_completed").html(itemsCompleted);
+
+            listItem.remove(); // Remove the todo item from the DOM
+          }
+        });
+      } // End if hasClass
     });
   });
 });

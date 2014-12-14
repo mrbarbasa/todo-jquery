@@ -75,7 +75,7 @@ app.delete('/item/:item_id', function(req, res) {
       if (err) {
         throw err;
       }
-
+      
       res.json({ success: "true" });
 
       db.close();
