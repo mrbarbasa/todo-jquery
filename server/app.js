@@ -42,7 +42,7 @@ app.post('/item', function(req, res) {
     collection.insert(req.body.new_item, function(err, arrayItem) {
       // Show the item that was just inserted; contains the _id field
       // Note that it is an array containing a single object
-      console.log(arrayItem[0]._id);
+      // console.log(arrayItem[0]._id);
       db.close();
       res.send(arrayItem[0]._id);
     }); // collection.insert
@@ -53,7 +53,6 @@ app.post('/item', function(req, res) {
 app.put('/item', function(req, res) {
 
   connect_to_db(function(collection, db) {
-    // var test = collection.find({ "_id": ObjectID(req.body._id) });
     collection.find({ "_id": new ObjectID(req.body._id) }).toArray(function(err, arrayItem) {
       arrayItem[0].completed = req.body.completed;
 
@@ -63,6 +62,24 @@ app.put('/item', function(req, res) {
 
       db.close();
     }); // collection.find
+  }); // connect_to_db
+
+});
+
+app.delete('/item/:item_id', function(req, res) {
+
+  connect_to_db(function(collection, db) {
+    var _id = req.params.item_id;
+
+    collection.remove({ "_id": new ObjectID(_id) }, function(err, result) {
+      if (err) {
+        throw err;
+      }
+
+      res.json({ success: "true" });
+
+      db.close();
+    }); // collection.remove
   }); // connect_to_db
 
 });

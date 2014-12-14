@@ -18,7 +18,26 @@ $(function() {
       }),
       "data-object-id": objectId
     });
-    todoItem.append(title);
+    
+
+    var deleteButton = $("<button>", {
+      type: "button",
+      text: "X",
+      click: function(e) {
+        $.ajax({
+          url: "/item/" + objectId,
+          type: "DELETE",
+          success: function(result) {
+            console.log("Deleted todo item");
+
+            var button = $(e.currentTarget);
+            button.closest("li").remove(); // Remove the todo item from the DOM
+          }
+        });
+      } // end click
+    });
+
+    todoItem.append(title).append(deleteButton);
     return todoItem;
   }
 
