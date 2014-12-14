@@ -6,24 +6,26 @@ $(function() {
     return itemsTotal - itemsCompleted;
   }
 
-  function addTodoItem(title, completed) {
+  function addTodoItem(title, completed, objectId) {
+    if (typeof completed === "boolean") {
+      console.log("isCompleted = " + completed);
+    }
     var todoItem = $("<li>", {
-      class: "todo_item" + (completed ? " todo_item_completed" : ""),
+      class: "todo_item" + (completed.toString() === "true" ? " todo_item_completed" : ""),
       html: $("<input>", {
         type: "checkbox",
-        checked: completed
-      })
+        checked: (completed.toString() === "true" ? "checked" : false)
+      }),
+      "data-object-id": objectId
     });
     todoItem.append(title);
     return todoItem;
   }
 
   // Load saved data onto the page
-  $.get("/todo_save.txt", function(data) {
-    var todos = $.parseJSON(data);
-
+  $.get("/items", function(todos) {
     todos.forEach(function(item) {
-      $("#todos").append(addTodoItem(item.title, item.completed));
+      $("#todos").append(addTodoItem(item.title, item.completed, item._id));
 
       if (item.completed) {
         itemsCompleted++;
@@ -41,9 +43,21 @@ $(function() {
       var todoText = input.val(); // Save the value before clearing it
       input.val(""); // Clear out the text after Enter is pressed
 
-      $("#todos").append(addTodoItem(todoText, false));
-      itemsTotal++;
-      $("#todos_left").html(getItemsLeft());
+      var todoItem = {
+        index: itemsTotal,
+        title: todoText,
+        completed: "false"
+      };
+
+      var post_data = {
+        new_item: todoItem
+      };
+
+      $.post("/item", post_data, function(objectId) {
+        $("#todos").append(addTodoItem(todoText, "false", objectId));
+        itemsTotal++;
+        $("#todos_left").html(getItemsLeft());
+      });
     }
   });
 
@@ -56,32 +70,38 @@ $(function() {
       listItem.addClass("todo_item_completed");
       $("#todos_completed").html(++itemsCompleted);
       $("#todos_left").html(getItemsLeft());
+
+      $.ajax({
+        url: "/item",
+        type: "PUT",
+        data: {
+          _id: listItem.data("object-id"),
+          completed: "true"
+        },
+        success: function(result) {
+          console.log("Set todo item to completed");
+        }
+      });
     }
     else { // If user unchecked
       if (listItem.hasClass("todo_item_completed")) {
         listItem.removeClass("todo_item_completed");
         $("#todos_completed").html(--itemsCompleted);
         $("#todos_left").html(getItemsLeft());
+
+        $.ajax({
+          url: "/item",
+          type: "PUT",
+          data: {
+            _id: listItem.data("object-id"),
+            completed: "false"
+          },
+          success: function(result) {
+            console.log("Set todo item to incomplete");
+          }
+        });
       }
     }
-  });
-
-  $("#saveTodos").click(function() {
-    var todos = [];
-
-    $("#todos .todo_item").each(function(index, element) {
-      todos.push({
-        index: index,
-        title: $(this).text(),
-        completed: $(this).find("input:checked").length > 0
-      });
-    });
-
-    var jsonTodos = {
-      "savedTodos": JSON.stringify(todos)
-    };
-
-    $.post("/save", jsonTodos);
   });
 
   $("#clearCompletedTodos").click(function() {
