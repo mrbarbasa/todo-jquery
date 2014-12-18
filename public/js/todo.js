@@ -73,7 +73,6 @@ $(function() {
       input.val(""); // Clear out the text after Enter is pressed
 
       var todoItem = {
-        index: itemsTotal,
         title: todoText,
         completed: "false"
       };

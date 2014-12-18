@@ -4,7 +4,9 @@ var bodyParser = require('body-parser');
 var fs = require('fs');
 var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
-var CONNECTION_STRING = 'mongodb://localhost:27017/todosdb';
+var secrets = require('./secrets');
+// var CONNECTION_STRING = 'mongodb://localhost:27017/todosdb'; // DEV
+var CONNECTION_STRING = secrets.connectionString; // PROD
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
