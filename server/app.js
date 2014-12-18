@@ -5,9 +5,13 @@ var fs = require('fs');
 var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var mongoose = require('mongoose');
-var secrets = require('./secrets');
+
+// var secrets = require('./secrets');
 // var CONNECTION_STRING = 'mongodb://localhost:27017/todosdb'; // DEV
-var CONNECTION_STRING = secrets.connectionString; // PROD
+// var CONNECTION_STRING = secrets.connectionString; // PROD
+
+// This is apparently the more secure way to include the connection string
+var CONNECTION_STRING = 'mongodb://root:' + process.env.DBPASS + '@ds063870.mongolab.com:63870/todos';
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
